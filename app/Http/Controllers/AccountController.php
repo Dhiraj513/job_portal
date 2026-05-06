@@ -75,8 +75,50 @@ public function authenticate(Request $request) {
     }
 }
 public function profile() {
-    return view('front.account.profile');
+    $id = Auth::user()->id;
+
+    $user = User::where('id',$id)->first();
+
+    return view('front.account.profile',[
+    'user' => $user
+    ]);
 }
+
+public function updateProfile(Request $request) {
+ $id = Auth::user()->id;
+
+$validator= Validator::make($request->all(),[
+    'name' => 'required|min:5|max:20',
+    'email' => 'required|email|unique:users,email,' . $id,
+]);
+if($validator->passes()) {
+
+$user = User::find($id);
+$user->name = $request->name;
+$user->email = $request->email;
+$user->mobile = $request->mobile;
+$user->designation = $request->designation;
+$user->save();
+
+session()->flash('success','Profile updated successfully');
+
+ return response()->json([
+        'status' => true,
+        'errors' => []
+
+    ]);
+
+}
+else {
+    return response()->json([
+        'status' => false,
+        'errors' => $validator->errors()
+
+    ]);
+}
+
+}
+
 public function logout() {
     Auth::logout();
     return redirect()->route('account.login');
