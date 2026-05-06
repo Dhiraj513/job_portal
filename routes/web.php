@@ -16,6 +16,16 @@ Route::get('/account/profile',[AccountController::class,'profile'])->name('accou
 Route::get('/account.logout',[AccountController::class,'logout'])->name('account.logout');
 
 
+Route::middleware('guest')->group(function () {
+    Route::get('/account/login',[AccountController::class,'login'])->name('account.login');
+    Route::get('/account/register',[AccountController::class,'registration'])->name('account.registration');
+});
+
+Route::get('/account/profile',[AccountController::class,'profile'])
+    ->name('account.profile')
+    ->middleware('auth');
+
+
 
 
 
