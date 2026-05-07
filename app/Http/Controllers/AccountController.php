@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\File;
 
 class AccountController extends Controller
 {
@@ -124,4 +127,49 @@ public function logout() {
     return redirect()->route('account.login');
 }
 
+public function updateProfilePic(Request $request) {
+    $id = Auth::user()->id;
+$validator = Validator::make($request->all(),[
+    'image' => 'required|image'
+
+]);
+
+if($validator->passes()) {
+
+$image = $request->image;
+$ext = $image->getClientOriginalExtension();
+$imageName = $id.'-'.time().'.'.$ext;
+$image->move(public_path('/profile_pic/'),$imageName);
+
+//thumbnail
+$sourcePath = public_path('/profile_pic/'.$imageName);
+$manager = new ImageManager(Driver::class);
+$image = $manager->read($sourcePath);
+
+// crop the best fitting 5:3 (600x360) ratio and resize to 600x360 pixel
+$image->cover(150, 150);
+$image->save(public_path('/profile_pic/thumb/' .$imageName));
+
+//delete the old profile pics
+File::delete(public_path('/profile_pic/thumb/' .Auth::user()->image));
+File::delete(public_path('/profile_pic/' .Auth::user()->image));
+
+
+User::where('id',$id)->update(['image' => $imageName]);
+
+session()->flash('success','Profile picture update successfully.');
+
+return response ()->json([
+    'status' => true,
+    'errors' => []
+]);
+
+}else{
+    return response()->json([
+        'status' => false,
+        'errors' => $validator->errors()
+    ]);
+}
+
+}
 };

@@ -33,4 +33,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/account/update-profile', [AccountController::class, 'updateProfile'])
         ->name('account.updateProfile');
+    
+    Route::post('/account/updateprofilepic', [AccountController::class, 'updateProfilePic'])
+        ->name('account.updateProfilePic');
+
 });
