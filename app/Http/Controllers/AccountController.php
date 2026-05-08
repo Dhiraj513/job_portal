@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\JobType;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -170,6 +172,41 @@ return response ()->json([
         'errors' => $validator->errors()
     ]);
 }
-
 }
+public function createJob() {
+    $categories = Category::orderBy('name','ASC')->where('status',1)->get();
+    $jobTypes = JobType::orderBy('name','ASC')->where('status',1)->get();
+
+    return view('front.account.job.create',[
+        'categories' => $categories,
+         'jobTypes' => $jobTypes,
+    ]);
+}
+public function saveJob(Request $request) {
+
+$rules = [
+    'title' => 'required|min:5|max:200',
+    'category' => 'required',
+    'jobType' => 'required',
+    'vacancy' => 'required'|'integer',
+    'location' => 'required|max:50',
+    'description' => 'required',
+    'company_name' => 'required|min:3|max:75',
+
+
+];
+    $validator = Validator::make($request->all(),$rules);
+
+    if ($validator->passes()) {
+
+    } else {
+        return response()->json([
+            'status' => false,
+            'errors' => $validator->errors()
+
+        ]);
+    }
+}
+
+
 };
