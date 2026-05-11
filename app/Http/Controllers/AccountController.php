@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\job;
 use App\Models\Category;
 use App\Models\JobType;
 use Illuminate\Support\Facades\Validator;
@@ -188,7 +189,7 @@ $rules = [
     'title' => 'required|min:5|max:200',
     'category' => 'required',
     'jobType' => 'required',
-    'vacancy' => 'required'|'integer',
+    'vacancy' => 'required|integer',
     'location' => 'required|max:50',
     'description' => 'required',
     'company_name' => 'required|min:3|max:75',
@@ -198,6 +199,30 @@ $rules = [
     $validator = Validator::make($request->all(),$rules);
 
     if ($validator->passes()) {
+       $job = new job();
+       $job->title = $request->title;
+       $job->category_id = $request->category;
+       $job->job_type_id = $request->jobType;
+       $job->vacancy = $request->vacancy;
+       $job->salary = $request->salary;
+       $job->location = $request->location;
+       $job->description = $request->description;
+       $job->benefits = $request->benefits;
+       $job->responsibility = $request->responsibility;
+       $job->qualificactions = $request->qualificactions;
+       $job->keywords = $request->keywords;
+       $job->experiance = $request->experiance;
+        $job->company_name = $request->company_name;
+        $job->company_location = $request->company_location;
+          $job->company_website = $request->website;
+       $job->save();
+
+       session()->flash('success','job added successfully.');
+        return response()->json([
+            'status' => true,
+            'errors' => []
+
+        ]);
 
     } else {
         return response()->json([
@@ -206,6 +231,9 @@ $rules = [
 
         ]);
     }
+}
+public function myJobs(){
+return view('front.account.job.my-jobs');
 }
 
 

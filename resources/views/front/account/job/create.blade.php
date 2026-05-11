@@ -45,7 +45,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label for="" class="mb-2">Job Type<span class="req">*</span></label>
-                                <select class="form-select">
+                                <select name="jobType" id="jobType" class="form-select">
                                     <option value="">Select Job Type</option>
                                     @if ($jobTypes->isNotEmpty())
                                     @foreach ($jobTypes as $jobType)
@@ -70,7 +70,7 @@
 
                             <div class="mb-4 col-md-6">
                                 <label for="" class="mb-2">Location<span class="req">*</span></label>
-                                <input type="text" placeholder="location" id="location" name="Location" class="form-control">
+                                <input type="text" placeholder="location" id="location" name="location" class="form-control">
                                  <p></p>
                             </div>
                         </div>
@@ -93,8 +93,8 @@
                             <textarea class="form-control" name="qualifications" id="qualifications" cols="5" rows="5" placeholder="Qualifications"></textarea>
                         </div>
                         <div class="mb-4">
-                        <label for="" class="mb-2">Experiance<span class="req">*</span></label>
-                            <select name="experiance" id="experiance" class="form-control">
+                        <label for="" class="mb-2">Experience<span class="req">*</span></label>
+                            <select name="experience" id="experience" class="form-control">
                                 <option value="1">1 Year</option>
                                 <option value="2">2 Years</option>
                                 <option value="3">3 Years</option>
@@ -112,7 +112,7 @@
             
                         <div class="mb-4">
                             <label for="" class="mb-2">Keywords</label>
-                            <input type="text" placeholder="keywords" id="keywords" cols="5" rows="5" id="keywords" name="keywords" class="form-control">
+                            <input type="text" placeholder="keywords"  id="keywords" name="keywords" class="form-control">
                         </div>
 
                         <h3 class="fs-4 mb-1 mt-5 border-top pt-5">Company Details</h3>
@@ -126,7 +126,7 @@
 
                             <div class="mb-4 col-md-6">
                                 <label for="" class="mb-2">Location</label>
-                                <input type="text" placeholder="Location" id="location" name="location" class="form-control">
+                                <input type="text" placeholder="Location" id="company_location" name="company_location" class="form-control">
                             </div>
                         </div>
 
@@ -135,13 +135,12 @@
                             <input type="text" placeholder="Website" id="website" name="website" class="form-control">
                         </div>
                     </div> 
-                </form>
+                
                     <div class="card-footer  p-4">
                         <button type="submit" class="btn btn-primary">Save Job</button>
-                    </div>               
-            </div>
-
-                             
+                    </div>   
+                    </form>            
+            </div>             
             </div>
         </div>
     </div>
@@ -150,64 +149,160 @@
 
 @section('customJs')
 <script type="text/javascript">
+
 $("#createJobForm").submit(function(e){
-        e.preventDefault();
 
-        $.ajax({
-            url:'{{ route("account.saveJob") }}',
-            type:'post',
-            dataType:'json',
-            data: $("#createJobform").serialize(),
-            success: function(response){
+    e.preventDefault();
 
-                if(response.status == true) {
-                     $("#name").removeClass('is-invalid')
-                        .siblings('p')
-                        .removeClass('invalid-feedback')
-                        .html('');
+    $.ajax({
 
-                         $("#email").removeClass('is-invalid')
-                        .siblings('p')
-                        .removeClass('invalid-feedback')
-                        .html('');
+        url: '{{ route("account.saveJob") }}',
+        type: 'post',
+        dataType: 'json',
+        data: $("#createJobForm").serialize(),
 
-                        window.location.href="{{ route('account.profile') }}";
+        success: function(response){
+
+            if(response.status == true){
+
+                $("title").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html('')
+
+                $("category").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html('')
+
+                $("jobType").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html('')
+
+                $("vacancy").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html('')
+
+                $("location").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html('')
+
+                $("description").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html('')
+
+                $("company_name").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html('')
 
 
-                }else{
-                    var errors = response.errors;
+               window.location.href = "{{ route('account.myJobs') }}";
 
-                    if (errors.title){
+            } else {
+
+                var errors = response.errors;
+
+                if(errors.title){
                     $("#title").addClass('is-invalid')
-                        .siblings('p')
-                        .addClass('invalid-feedback')
-                        .html(errors.title);
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors.title);
                 } else {
                     $("#title").removeClass('is-invalid')
-                        .siblings('p')
-                        .removeClass('invalid-feedback')
-                        .html('');
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html('');
                 }
 
-                if (errors.email){
-                    $("#email").addClass('is-invalid')
-                        .siblings('p')
-                        .addClass('invalid-feedback')
-                        .html(errors.email);
+                if(errors.category){
+                    $("#category").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors.category);
                 } else {
-                    $("#email").removeClass('is-invalid')
-                        .siblings('p')
-                        .removeClass('invalid-feedback')
-                        .html('');
+                    $("#category").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html('');
                 }
 
-
-
+                if(errors.jobType){
+                    $("#jobType").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors.jobType);
+                } else {
+                    $("#jobType").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html('');
                 }
+
+                if(errors.vacancy){
+                    $("#vacancy").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors.vacancy);
+                } else {
+                    $("#vacancy").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html('');
+                }
+
+                if(errors.location){
+                    $("#location").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors.location);
+                } else {
+                    $("#location").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html('');
+                }
+
+                if(errors.description){
+                    $("#description").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors.description);
+                } else {
+                    $("#description").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html('');
+                }
+
+                if(errors.company_name){
+                    $("#company_name").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors.company_name);
+                } else {
+                    $("#company_name").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html('');
+                }
+
             }
 
-        });
+        },
+
+        error: function(xhr){
+            console.log(xhr.responseText);
+        }
+
     });
+
+});
+
 </script>
 @endsection
 

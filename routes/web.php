@@ -43,4 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/account/save-job', [AccountController::class, 'saveJob'])
         ->name('account.saveJob');
 
+     Route::get('/account/my-jobs', [AccountController::class, 'myJobs'])
+        ->name('account.myJobs');   
+
 });
