@@ -203,15 +203,16 @@ $rules = [
        $job->title = $request->title;
        $job->category_id = $request->category;
        $job->job_type_id = $request->jobType;
+        $job->user_id = Auth::user()->id;
        $job->vacancy = $request->vacancy;
        $job->salary = $request->salary;
        $job->location = $request->location;
        $job->description = $request->description;
        $job->benefits = $request->benefits;
        $job->responsibility = $request->responsibility;
-       $job->qualificactions = $request->qualificactions;
+       $job->qualification = $request->qualification;
        $job->keywords = $request->keywords;
-       $job->experiance = $request->experiance;
+       $job->experience = $request->experience;
         $job->company_name = $request->company_name;
         $job->company_location = $request->company_location;
           $job->company_website = $request->website;
@@ -233,8 +234,24 @@ $rules = [
     }
 }
 public function myJobs(){
-return view('front.account.job.my-jobs');
+
+$jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->paginate(10);
+
+
+return view('front.account.job.my-jobs',[
+    'jobs' => $jobs
+]);
 }
 
+public function editJob(){
+     $categories = Category::orderBy('name','ASC')->where('status',1)->get();
+    $jobTypes = JobType::orderBy('name','ASC')->where('status',1)->get();
+    return view('front.account.job.edit',[
+
+    'categories' => $categories,
+    'jobTypes' => $jobTypes,
+     ]);
+
+}
 
 };

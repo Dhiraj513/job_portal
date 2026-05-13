@@ -1,7 +1,7 @@
 @extends('front.layouts.app')
 @section('main')
 <section class="section-5 bg-2">
-    <div class="container py-5">
+    <div class="container py-5">    
         <div class="row">
             <div class="col">
                 <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4">
@@ -19,7 +19,8 @@
             <div class="col-lg-9">
                 @include('front.message')
                <div class="card border-0 shadow mb-4 ">
-                <form action="" method="post" id="createJobForm" name="createJobform">
+                <form action="" method="post" id="createJobForm" name="createJobForm">
+                    @csrf
                     <div class="card-body card-form p-4">
                         <h3 class="fs-4 mb-1">Job Details</h3>
                         <div class="row">
@@ -90,7 +91,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="" class="mb-2">Qualifications</label>
-                            <textarea class="form-control" name="qualifications" id="qualifications" cols="5" rows="5" placeholder="Qualifications"></textarea>
+                            <textarea class="form-control" name="qualification" id="qualification" cols="5" rows="5" placeholder="Qualifications"></textarea>
                         </div>
                         <div class="mb-4">
                         <label for="" class="mb-2">Experience<span class="req">*</span></label>
@@ -165,37 +166,37 @@ $("#createJobForm").submit(function(e){
 
             if(response.status == true){
 
-                $("title").removeClass('is-invalid')
+                $("#title").removeClass('is-invalid')
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html('')
 
-                $("category").removeClass('is-invalid')
+                $("#category").removeClass('is-invalid')
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html('')
 
-                $("jobType").removeClass('is-invalid')
+                $("#jobType").removeClass('is-invalid')
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html('')
 
-                $("vacancy").removeClass('is-invalid')
+                $("#vacancy").removeClass('is-invalid')
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html('')
 
-                $("location").removeClass('is-invalid')
+                $("#location").removeClass('is-invalid')
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html('')
 
-                $("description").removeClass('is-invalid')
+                $("#description").removeClass('is-invalid')
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html('')
 
-                $("company_name").removeClass('is-invalid')
+                $("#company_name").removeClass('is-invalid')
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html('')

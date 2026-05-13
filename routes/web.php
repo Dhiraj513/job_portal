@@ -46,4 +46,7 @@ Route::middleware('auth')->group(function () {
      Route::get('/account/my-jobs', [AccountController::class, 'myJobs'])
         ->name('account.myJobs');   
 
+     Route::get('/account/my-jobs/edit/{jobId}', [AccountController::class, 'editJob'])
+        ->name('account.editJob'); 
+
 });
