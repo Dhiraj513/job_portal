@@ -154,6 +154,7 @@
 $("#createJobForm").submit(function(e){
 
     e.preventDefault();
+     $("button[type='submit']").prop('disabled',true);
 
     $.ajax({
 
@@ -163,6 +164,7 @@ $("#createJobForm").submit(function(e){
         data: $("#createJobForm").serialize(),
 
         success: function(response){
+             $("button[type='submit']").prop('disabled',false);
 
             if(response.status == true){
 

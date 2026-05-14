@@ -3,8 +3,10 @@
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\JobsController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
 
 // Guest routes (only for NOT logged-in users)
 Route::middleware('guest')->group(function () {
@@ -48,5 +50,11 @@ Route::middleware('auth')->group(function () {
 
      Route::get('/account/my-jobs/edit/{jobId}', [AccountController::class, 'editJob'])
         ->name('account.editJob'); 
+
+    Route::post('/account/update-job/{jobId}', [AccountController::class, 'updateJob'])
+        ->name('account.updateJob');
+
+    Route::post('/account/delete-Job', [AccountController::class, 'deleteJob'])
+        ->name('account.deleteJob');           
 
 });
