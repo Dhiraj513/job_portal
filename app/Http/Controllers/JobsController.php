@@ -19,33 +19,36 @@ class JobsController extends Controller
 
    //search using keywords
    if (!empty($request->keyword)) {
-    $jobs =$jobs->where(function($query)use ($request) {
-    $query->orWhere('title','like','%'.$request->keyword.'%');
-    $query->orWhere('keywords','like','%'.$request->keyword.'%');
+    $jobs =$jobs->where(function($query) use ($request) {
+    $query->orWhere('title','like','%'.$request->keyword .'%');
+    $query->orWhere('keywords','like','%'. $request->keyword .'%');
    });
    }
    //search using location
    if(!empty($request->location)) {
-    $jobs = $jobs->where('location',$request->location);
+    $jobs = $jobs->where('location', $request->location);
    }
    //search using category
    if(!empty($request->category)) {
-    $jobs = $jobs->where('category_id',$request->category);
+    $jobs = $jobs->where('category_id', $request->category);
    }
    //search using Job Type
-   $jobTypeArray = [];
+   
    if(!empty($request->jobType)) {
     $jobTypeArray = explode(',', $request->jobType);
-    $jobs = $jobs->whereIn('job_type_id',$jobTypeArray);
+    $jobs = $jobs->whereIn('job_type_id', $jobTypeArray);
+   }else {
+    $jobTypeArray = [];
    }
    //search using experience
    if(!empty($request->experience)) {
-    $jobs = $jobs->where('experience',$request->experience);
+    $jobs = $jobs->where('experience', $request->experience);
    }
+   
 
-   $jobs= $jobs->with('jobType');
+   $jobs= $jobs->with(['jobType','category']);
 
-   if(!empty($request->sort) && $request->sort == 0) {
+   if($request->sort == '0') {
    $jobs= $jobs->orderBy('created_at','ASC');
    }else {
     $jobs= $jobs->orderBy('created_at','DESC');
@@ -59,5 +62,17 @@ class JobsController extends Controller
         'jobs' => $jobs,
         'jobTypeArray' => $jobTypeArray,
         ]);
+    }
+    public function detail($id) {
+
+        $job = Job::where([
+                            'id' => $id, 
+                            'status' => 1
+                            ])->with(['jobType','category'])->first();
+
+        if ($job == null) {
+            abort(404);
+        }
+        return view('front.jobDetail',['job' => $job]);
     }
 }
